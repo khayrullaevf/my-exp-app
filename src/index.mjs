@@ -19,11 +19,18 @@ app.get('/',(req,res)=>{
 })
 
 app.get('/api/users',(req,res)=>{
-    res.send([
-        {id:1,name:'Fazliddin'},
-        {id:2,name:'Jack'},
-        {id:3,name:'Tony'},
-    ])
+    console.log(req.query);
+    const {query:{filter,value }}=req
+    if (!filter&&!value) return res.send(mockUsers)
+    
+    if(filter&&value) return res.send(
+    mockUsers.filter((user)=>user[filter].includes(value))
+    )
+
+
+
+
+
 })
 
 app.get('/api/users/:id',(req,res)=>{
