@@ -1,21 +1,11 @@
 import { Router } from "express";
 import { validationResult,checkSchema,matchedData } from "express-validator";
-const router=Router()
 import { mockUsers } from "../utils/constants.mjs";
 import {createUserValidationSchema} from '../utils/validation.Schemas.mjs'
+import { resolveIndexByUserId } from "../middlewares/middlewares.mjs";
 
-const resolveIndexByUserId=(req,res,next)=>{
-    const{
-        params:{id}
-        }=req 
-      const parsedId=parseInt(id)
-      if (isNaN(parsedId)) return res.sendStatus(400)
-      const findUserIndex=mockUsers.findIndex((user)=>user.id===parsedId)
-      if (findUserIndex===-1) return res.sendStatus(404)
-      req.findUserIndex=findUserIndex
-      next()
-}
 
+const router=Router()
 
 router.get('/',(req,res)=>{
     const {query:{filter,value }}=req
@@ -42,7 +32,6 @@ router.get('/:id',resolveIndexByUserId,(req,res)=>{
     const findUser=mockUsers[findUserIndex]
     if (!findUser) return res.status(404).send({msg:'User not found'})
     return res.send(findUser)
- 
 })
 
 
@@ -58,7 +47,6 @@ router.patch('/:id',resolveIndexByUserId,(req,res)=>{
 const{body, findUserIndex}=req 
 mockUsers[findUserIndex]={...mockUsers[findUserIndex], ...body}
 return res.sendStatus(200)
-
 })
 router.delete('/:id',resolveIndexByUserId,(req,res)=>{
     const{findUserIndex}=req
