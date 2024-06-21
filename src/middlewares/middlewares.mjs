@@ -11,3 +11,8 @@ export const resolveIndexByUserId=(req,res,next)=>{
       req.findUserIndex=findUserIndex
       next()
 }
+
+export const requestTime = function (req, res, next) {
+    req.requestTime = Date.now()
+    next()
+  }
